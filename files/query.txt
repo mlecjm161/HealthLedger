@@ -1,0 +1,16 @@
+Wed Dec 11 2019 04:48:28 GMT+0600 (Bangladesh Standard Time)
+Steps: 1 
+Calory: 3 
+Distance: 2 
+Wed Dec 11 2019 04:49:08 GMT+0600 (Bangladesh Standard Time)
+Steps: 1 
+Calory: 31 
+Distance: 33 
+Wed Dec 11 2019 04:53:10 GMT+0600 (Bangladesh Standard Time)
+Steps: 13 
+Calory: 31 
+Distance: 33 
+Wed Dec 11 2019 05:19:07 GMT+0600 (Bangladesh Standard Time)
+Steps: as 
+Calory: ljlh 
+Distance: lljh 

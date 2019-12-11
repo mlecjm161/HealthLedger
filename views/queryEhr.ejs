@@ -1,0 +1,23 @@
+<html>
+
+<head>
+        <title> Other Parties </title>
+</head>
+
+<body>
+        <br>
+        <form id="form_id" method="post">
+                <label>Search for A Token</label>
+                <input type="text" id="name" placeholder="Pointer">
+                <input type="button" value="submit" onclick="myfunc()">
+        </form>
+        <script type="text/javascript">
+                function myfunc() {
+                        var x = document.getElementById("name").value;
+                        document.getElementById("form_id").action = "/api/userdata/" + x;
+                        document.getElementById("form_id").submit();
+                }
+        </script>
+</body>
+
+</html>

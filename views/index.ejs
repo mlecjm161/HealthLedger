@@ -1,0 +1,53 @@
+<head>
+        <title> Data Owner </title>
+</head>
+
+<body>
+        <form id="allcars" method="get" action="/api/txn/all">
+                <input type="submit" value="QueryALlCars">
+        </form>
+        <br>
+        <form id="form_id" method="post">
+                <label>Search for A Txn</label>
+                <input type="text" id="name" placeholder="Pointer">
+                <input type="button" value="submit" onclick="myfunc()">
+        </form>
+        <script type="text/javascript">
+                function myfunc() {
+                        var x = document.getElementById("name").value;
+                        document.getElementById("form_id").action = "/api/txn/query/" + x;
+                        document.getElementById("form_id").submit();
+                }
+        </script>
+
+        <form id="create" method="post" action="/api/txn/create/token">
+                <label>Create Token</label>
+                <input type="text" name="pointer" placeholder="Pointer">
+                <input type="text" name="key" placeholder="Key">
+                <input type="text" name="uid" placeholder="UserID">
+                <input type="submit" name="button" value="Create">
+        </form>
+        <form id="ipfs" method="post" action="/api/txn/create/ehr">
+                <label>Add EHR to ipfs and commit transaction</label>
+                <input type="text" name="steps" placeholder="Steps">
+                <input type="text" name="distance" placeholder="Distance">
+                <input type="text" name="calory" placeholder="Calory">
+                <input type="text" name="uid" placeholder="UserID">
+                <input type="submit" name="button" value="IPFS">
+        </form>
+        <form id="chOwn" method="post">
+                <label>Change Permission</label>
+                <input type="text" id="id" name="pointer" placeholder="Pointer">
+                <input type="text" name="data" placeholder="New Permission">
+                <input type="submit" name="button" value="Change" onclick="myfunc2()">
+        </form>
+
+        <script type="text/javascript">
+                function myfunc2() {
+                        var x = document.getElementById("id").value;
+                        document.getElementById("chOwn").action = "/api/permission/" + x;
+                        document.getElementById("chOwn").submit();
+                }
+        </script>
+
+</body>
