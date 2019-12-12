@@ -1,14 +1,12 @@
 var express = require('express');
 var router = express.Router();
-
 const { FileSystemWallet, Gateway } = require('fabric-network');
 const path = require('path');
 const ccpPath = path.resolve('/media/nazmus/Edu & Softs/4-2/Thesis/fabric-samples/first-network/connection-org2.json');
 
-/* GET home page. */
+/* get userdata with the token */
 router.post('/:id', async function(req, res, next) {
     try {
-
         // Create a new file system based wallet for managing identifirstties.
         const walletPath = path.join(process.cwd(), 'wallet');
         const wallet = new FileSystemWallet(walletPath);
@@ -38,17 +36,22 @@ router.post('/:id', async function(req, res, next) {
         const result = await contract.evaluateTransaction('queryCar', req.params.id);
         var obj = JSON.parse(result.toString());
 
-        if (obj.data == 'Yes') {
+        if (obj.data == 'yes') {
+            if(Number(obj.maturity) < new Date().getTime()){
+                await contract.submitTransaction('changeCarOwner', req.params.id, "no");
+                return res.send({message: "Token expired!"});
+            }else{
             const result1 = await contract.evaluateTransaction('queryCar', obj.key);
-            res.send(JSON.parse(result1.toString()));
+            return res.send(JSON.parse(result1.toString()));
+            }
         } else {
             console.log(`Permission not granted for user ${obj.uid}`);
-            res.send({message: "Permission not Granted"});
+            return res.send({message: `Permission not granted for user ${obj.uid}`});
         }
 
     } catch (error) {
         console.error(`Failed to evaluate transaction: ${error}`);
-        res.send({message: "Transaction failed"});
+        return res.send({message: `Failed to submit transaction: ${error}`});
     }
 });
 

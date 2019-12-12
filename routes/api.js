@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
 
-/* GET home page. */
-router.post('/' ,function (req, res, next) {
-  console.log(req.body.data);
-  res.status(200).json({message: 'you are connected'});
+/* test options */
+router.get('/' , function (req, res, next) {
+  var date = new Date();
+  var timestamp = date.getTime();
+  console.log(typeof timestamp.toString(),timestamp.toString());
+  return res.send({time: timestamp.toString()});
 });
 module.exports = router;
