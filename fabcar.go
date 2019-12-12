@@ -43,17 +43,14 @@ type SmartContract struct {
 }
 
 // Define the car structure, with 4 properties.  Structure tags are used by encoding/json library
-type Car struct {
-	Make   string `json:"make"`
-	Model  string `json:"model"`
-	Colour string `json:"colour"`
-	Owner  string `json:"owner"`
-}
+
 type User struct {
 	Key string `json:"key"`
 	Uid string `json:"uid"`
 	Type string `json:"type"`
 	Data string `json:"data"`
+	Issued string `json:"issued"`
+	Maturity string `json:"maturity"`
 }
 /*
  * The Init method is called when the Smart Contract "fabcar" is instantiated by the blockchain network
@@ -82,6 +79,8 @@ func (s *SmartContract) Invoke(APIstub shim.ChaincodeStubInterface) sc.Response 
 		return s.queryAllCars(APIstub)
 	} else if function == "changeCarOwner" {
 		return s.changeCarOwner(APIstub, args)
+	}else if function == "extendLimit"{
+		return s.extendLimit(APIstub, args)
 	}
 
 	return shim.Error("Invalid Smart Contract function name.")
@@ -99,11 +98,8 @@ func (s *SmartContract) queryCar(APIstub shim.ChaincodeStubInterface, args []str
 
 func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Response {
 	users := []User{
-		User{Key: "A0", Uid: "12s11", Type:"data", Data:"Qmuasdlkjasdaiosjdklaj"},
-		User{Key: "A1", Uid: "12s12", Type:"data", Data:"Qmuasdlkjasdaiosjdklaj"},
-		User{Key: "A0", Uid: "12s11", Type:"permission", Data:"Yes"},
-		User{Key: "A1", Uid: "12s12", Type:"permission", Data:"Yes"},
-
+		User{Key: "A0", Uid: "sakib17", Type:"ehr", Data:"QmeAMAYgBpbryorbiHDEWxKV3XXLn49jJmpeBzAp6EBuHS", Issued:"123456678", Maturity:"N/A"},
+		User{Key: "A1", Uid: "sakib17", Type:"ehr", Data:"QmeAMAYgBpbryorbiHDEWxKV3XXLn49jJmpeBasdqASwqZ", Issued:"234343451", Maturity:"N/A"},
 	}
 
 	i := 0
@@ -120,11 +116,11 @@ func (s *SmartContract) initLedger(APIstub shim.ChaincodeStubInterface) sc.Respo
 
 func (s *SmartContract) createCar(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
 
-	if len(args) != 5 {
+	if len(args) != 7 {
 		return shim.Error("Incorrect number of arguments. Expecting 5")
 	}
 
-	var user = User{Key: args[1], Uid: args[2], Type: args[3], Data: args[4]}
+	var user = User{Key: args[1], Uid: args[2], Type: args[3], Data: args[4], Issued: args[5], Maturity: args[6]}
 
 	userAsBytes, _ := json.Marshal(user)
 	APIstub.PutState(args[0], userAsBytes)
@@ -186,6 +182,24 @@ func (s *SmartContract) changeCarOwner(APIstub shim.ChaincodeStubInterface, args
 
 	json.Unmarshal(userAsBytes, &user)
 	user.Data = args[1]
+
+	userAsBytes, _ = json.Marshal(user)
+	APIstub.PutState(args[0], userAsBytes)
+
+	return shim.Success(nil)
+}
+
+func (s *SmartContract) extendLimit(APIstub shim.ChaincodeStubInterface, args []string) sc.Response {
+
+	if len(args) != 2 {
+		return shim.Error("Incorrect number of arguments. Expecting 2")
+	}
+
+	userAsBytes, _ := APIstub.GetState(args[0])
+	user := User{}
+
+	json.Unmarshal(userAsBytes, &user)
+	user.Maturity = args[1]
 
 	userAsBytes, _ = json.Marshal(user)
 	APIstub.PutState(args[0], userAsBytes)
